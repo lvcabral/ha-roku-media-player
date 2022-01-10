@@ -6,6 +6,8 @@ import logging
 
 import voluptuous as vol
 
+from urllib.parse import quote
+
 from homeassistant.components.media_player import (
     BrowseMedia,
     MediaPlayerDeviceClass,
@@ -27,6 +29,10 @@ from homeassistant.components.media_player.const import (
     SUPPORT_VOLUME_STEP,
 )
 from homeassistant.components.media_player.errors import BrowseError
+from homeassistant.components.stream.const import (
+    HLS_PROVIDER,
+    FORMAT_CONTENT_TYPE
+)
 from homeassistant.const import (
     STATE_HOME,
     STATE_IDLE,
@@ -347,7 +353,7 @@ class RokuMediaPlayer(RokuEntity, MediaPlayerEntity):
     @roku_exception_handler
     async def async_play_media(self, media_type: str, media_id: str, **kwargs) -> None:
         """Tune to channel."""
-        if media_type not in (MEDIA_TYPE_APP, MEDIA_TYPE_CHANNEL):
+        if media_type not in (MEDIA_TYPE_APP, MEDIA_TYPE_CHANNEL, FORMAT_CONTENT_TYPE[HLS_PROVIDER]):
             _LOGGER.error(
                 "Invalid media type %s. Only %s and %s are supported",
                 media_type,
@@ -357,8 +363,20 @@ class RokuMediaPlayer(RokuEntity, MediaPlayerEntity):
             return
 
         if media_type == MEDIA_TYPE_APP:
-            await self.coordinator.roku.launch(media_id)
+            media_array = media_id.split(",")
+            if len(media_array) > 1:
+                app_id = media_array[0].strip()
+                content_id = media_array[1].strip()
+                _LOGGER.info("Launching Roku app %s with deep link %s", app_id, content_id)
+                await self.coordinator.roku.launch(app_id, {"contentId": quote(content_id, safe="")})
+            else:
+                _LOGGER.info("Launching Roku app %s", media_id)
+                await self.coordinator.roku.launch(media_id)
+        elif media_type == FORMAT_CONTENT_TYPE[HLS_PROVIDER]:
+            _LOGGER.info("Launching Roku side loaded app with deep link %s", media_id)
+            await self.coordinator.roku.launch("dev", {"contentId": quote(media_id, safe="")})
         elif media_type == MEDIA_TYPE_CHANNEL:
+            _LOGGER.info("Switching to Roku TV channel %s", media_id)
             await self.coordinator.roku.tune(media_id)
 
         await self.coordinator.async_request_refresh()
