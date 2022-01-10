@@ -1,10 +1,8 @@
 {
-    "name": "Integration blueprint",
+    "name": "Roku Custom Component",
     "hacs": "1.6.0",
     "domains": [
-        "binary_sensor",
-        "sensor",
-        "switch"
+        "media_player"
     ],
     "homeassistant": "0.118.0"
 }
