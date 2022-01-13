@@ -52,7 +52,15 @@ Using the `appID` for the channel and a `contentId` you can tell Roku to start a
 
 More details can be found on the [Roku dev pages](https://developer.roku.com/docs/developer-program/debugging/external-control-api.md)
 
-As an Example, if you would like to start this _YouTube Fireplace video_ (`https://www.youtube.com/watch?v=6VB4bgiB0yA`) automatically on your Roku, you just need use the following action, where you add the `entity_id` of your device, the YouTube `appId` and  `contentId` (YouTube video code) separated by a comma on the `media_content_id` parameter, and the `media_content_type` set as `app`.
+Check some Examples below of how to automate the startup of different Roku apps with content:
+
+#### YouTube Video
+
+To start this _YouTube Fireplace video_ (`https://www.youtube.com/watch?v=6VB4bgiB0yA`) automatically on your Roku, you just need use the following action:
+
+- Replace the `entity_id` with your device
+- YouTube `appId` is `837` and the `contentId` (YouTube video code) separated by a comma
+- The `media_content_type` set as `app`
 
 ```yaml
 action:
@@ -61,6 +69,42 @@ action:
       entity_id: media_player.roku_express_4k
     data:
       media_content_id: 837,6VB4bgiB0yA
+      media_content_type: app
+```
+
+#### Hulu Episode
+
+```yaml
+action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.roku_express_4k
+    data:
+      media_content_id: 2285,american-dad-977c8e25-cde0-41b7-80ce-e746f2d2093f
+      media_content_type: app
+```
+
+#### Spotify Playlist
+
+```yaml
+action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.roku_express_4k
+    data:
+      media_content_id: 22297,spotify:playlist:5xddIVAtLrZKtt4YGLM1SQ
+      media_content_type: app
+```
+
+#### Spotify Track
+
+```yaml
+action:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.roku_express_4k
+    data:
+      media_content_id: 22297,spotify:track:67awxiNHNyjMXhVgsHuIrs
       media_content_type: app
 ```
 
