@@ -2,7 +2,11 @@
 
 _Custom component that extends Home Assistant Roku integration allowing to use the media player with deep links._
 
-**NOTE: ** This repository is now archived as the official integration added the features I proposed here, please refer to the HA official documentation page for details on how to use it, as their implementations is different from mine. https://www.home-assistant.io/integrations/roku/
+**NOTICE:**
+
+This repository is now archived as the official integration added the features I proposed here, please refer to the HA official documentation page for details on how to use it, as their implementations is different from mine. https://www.home-assistant.io/integrations/roku/
+
+---
 
 **This component will set up the following platforms.**
 
